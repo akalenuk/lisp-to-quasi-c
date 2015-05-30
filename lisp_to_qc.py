@@ -1,11 +1,3 @@
-test = """
-(set fact (lambda x 
-    (if (= x 1) 
-        1 
-        (* (fact (- x 1)) x)
-    )
-))"""
-
 SPACES = [' ', '\t', '\r', '\n']
 OPERATORS = {
 '+': '+', 
@@ -76,7 +68,7 @@ def tree_to_qc(tree):
 	if isinstance(code[0], tuple):
 		# list of calls (root)
 		for space, chunk in zip(spaces, code):
-			qc += space + tree_to_qc(chunk)
+			qc += space + tree_to_qc(chunk) + ';'
 		if len(spaces) > len(code):
 			qc += spaces[-1]
 	elif code[0] == 'if':
@@ -108,7 +100,10 @@ def tree_to_qc(tree):
 			qc += spaces[-1] + tree_to_qc(code[-1]) + ')'
 	return qc
 
+def remove_comments(sourse):
+	return '\n'.join([line.split(';')[0] for line in sourse.split('\n')])
 
-tree = lisp_to_tree(test)
-
+sourse = open('./test-case-2.scm').read()
+clean_sourse = remove_comments(sourse) 
+tree = lisp_to_tree(clean_sourse)
 print tree_to_qc(tree)
