@@ -9,6 +9,7 @@ OPERATORS = {
 '>=': '>=', 
 '<': '<', 
 '>': '>'}
+SUBSTIDUDE_WITH_UNDERSCORE = set(['-', '?', '*'])
 
 def lisp_to_tree(lisp_text):
 	spaces = []
@@ -48,7 +49,10 @@ def lisp_to_tree(lisp_text):
 			chunk = '' + char
 		else:
 			if mode == 'code':
-				chunk += char
+				if char in SUBSTIDUDE_WITH_UNDERSCORE:
+					chunk += '_'
+				else:
+					chunk += char
 			else:
 				spaces += [chunk]
 				chunk = '' + char
@@ -103,7 +107,8 @@ def tree_to_qc(tree):
 def remove_comments(sourse):
 	return '\n'.join([line.split(';')[0] for line in sourse.split('\n')])
 
+
 sourse = open('./test-case-2.scm').read()
 clean_sourse = remove_comments(sourse) 
 tree = lisp_to_tree(clean_sourse)
-print tree_to_qc(tree)
+print 'main(){' + tree_to_qc(tree) + '}'
