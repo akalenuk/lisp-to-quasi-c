@@ -1,3 +1,5 @@
+#!/usr/bin/python
+
 SPACES = [' ', '\t', '\r', '\n']
 OPERATORS = {
 '+': '+', 
@@ -107,8 +109,11 @@ def tree_to_qc(tree):
 def remove_comments(sourse):
 	return '\n'.join([line.split(';')[0] for line in sourse.split('\n')])
 
-
-sourse = open('./test-case-2.scm').read()
-clean_sourse = remove_comments(sourse) 
-tree = lisp_to_tree(clean_sourse)
-print 'main(){' + tree_to_qc(tree) + '}'
+from sys import argv
+if len(argv) == 2:
+	source = open(argv[1]).read()
+	clean_sourse = remove_comments(source)
+	tree = lisp_to_tree(clean_sourse)
+	print 'main(){' + tree_to_qc(tree) + '}'
+else:
+	print 'give me scheme file name'
