@@ -85,6 +85,13 @@ def tree_to_qc(tree):
 		qc += spaces[3] + tree_to_qc(code[3]) + '}'
 		if len(spaces) > len(code):
 			qc += spaces[-1]
+	elif code[0] == 'define':
+		# define (requires lambda)
+		qc += spaces[0] + 'define('
+		qc += spaces[1] + tree_to_qc(code[1]) + ', [](){'
+		qc += spaces[2] + tree_to_qc(code[2]) + ';})'
+		if len(spaces) > len(code):
+			qc += spaces[-1]
 	elif code[0] in OPERATORS:
 		# infix operators
 		operator = OPERATORS[code[0]]
